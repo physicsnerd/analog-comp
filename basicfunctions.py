@@ -104,19 +104,6 @@ def mult_summ(vals):
     '''
     return reduce(lambda x, y: x*y, vals)
 
-@decorator
-def time_vary_integrate(step, t_step, new_val, integral_val, typ, init_val):
-    if step == 1:
-        return t_step/2*(new_val[-2]+new_val[-1])+init_val
-    elif step == 2:
-        return t_step/3*(new_val[-3] + 4*new_val[-2] + new_val[-1]) + init_val
-    elif step == 3:
-        #return 1/(12*t_step)*(4*new_val[-4]+(t_step**2)*new_val[-4]-8*(t_step**2)*new_val[-3]-8*new_val[-2]+16*(t_step**2)*new_val[-2]+4*new_val[-1]+3*(t_step**2)*new_val[-1]) + integral_val
-        return t_step/6*(new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]) + integral_val
-    elif step == 4:
-        return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
-    else:
-        return t_step/24*(new_val[-4] - 5*new_val[-3] + 19*new_val[-2] + 9*new_val[-1]) + integral_val
 '''
 @decorator
 def tvar_int_noy2(step, t_step, new_val, integral_val, typ, init_val):
@@ -147,6 +134,30 @@ def tvar_int_3stage(step, t_step, new_val, integral_val, typ, init_val):
     else:
         return
 '''
+
+def trapezoidal(step, t_step, new_val, init_val):
+    return
+
+def simp13(step, t_step, new_val, init_val):
+    return
+
+def simp38(step, t_step, new_val, init_val):
+    return
+
+def boole(step, t_step, new_val, init_val):
+    return
+
+def simp13cum(step, t_step, new_val, integral_val):
+    return
+
+def simp38cum(step, t_step, new_val, integral_val):
+    return
+
+def boolecum(step, t_step, new_val, integral_val):
+    return
+
+def fifthcum(step, t_step, new_val, integral_val):
+    return
 
 @decorator
 def integrate(step, t_step, new_val, integral_val, typ, init_val):
