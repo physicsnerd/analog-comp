@@ -136,28 +136,34 @@ def tvar_int_3stage(step, t_step, new_val, integral_val, typ, init_val):
 '''
 
 def trapezoidal(step, t_step, new_val, init_val):
-    return
+    return t_step/2*(new_val[-2] + new_val[-1]) + init_val
 
 def simp13(step, t_step, new_val, init_val):
-    return
+    return t_step/3*(new_val[-3]+4*new_val[-2]+new_val[-1]) + init_val
 
 def simp38(step, t_step, new_val, init_val):
-    return
+    return 3*t_step/8*(new_val[-4] + 3*new_val[-3] + 3*new_val[-2] + new_val[-1]) + init_val
 
 def boole(step, t_step, new_val, init_val):
-    return
+    return 2*t_step/45*(7*new_val[-5] + 32*new_val[-4] + 12*new_val[-3] + 32*new_val[-2] + 7*new_val[-1]) + init_val
+
+def fifth(step, t_step, new_val, init_val):
+    return 5*t_step/288*(19*new_val[-6] + 75*new_val[-5] + 50*new_val[-4] + 50*new_val[-3] + 75*new_val[-2] + 19*new_val[-1]) + init_val
+
+def trapcum(step, t_step, new_val, integral_val):
+    return t_step/2*(new_val[-2] + new_val[-1]) + integral_val
 
 def simp13cum(step, t_step, new_val, integral_val):
-    return
+    return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
 
 def simp38cum(step, t_step, new_val, integral_val):
-    return
+    return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
 
 def boolecum(step, t_step, new_val, integral_val):
-    return
+    return t_step/720*(-19*new_val[-5] + 106*new_val[-4] - 264*new_val[-3] + 646*new_val[-2] + 251*new_val[-1]) + integral_val
 
 def fifthcum(step, t_step, new_val, integral_val):
-    return
+    return t_step/1440*(27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + 1427*new_val[-2] + 475*new_val[-1]) + integral_val
 
 @decorator
 def integrate(step, t_step, new_val, integral_val, typ, init_val):
