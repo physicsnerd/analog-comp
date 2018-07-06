@@ -261,18 +261,6 @@ def pwm_map(val, mini, maxi, pwm_res):
         x = val - mini
         return round(x/(maxi-mini)*scale_fac)
 
-def analog_output(val, mini, maxi, pin, freq, pwm_res):
-    '''
-    Takes in all values necessary for pwm_map() along with the frequency the pwm
-    should be set to and the GPIO pin number for the output. The function sets up
-    the pin for use and then scales the value using pwm_map(). It does not actually
-    return a value.
-    '''
-    pi.set_mode(pin, pigpio.OUTPUT)
-    pi.set_PWM_frequency(pin, freq)
-    pi.set_PWM_dutycycle(pin, pwm_map(val, mini, maxi, pwm_res))
-    return None
-
 def step_vary(xv_array, yv_array, xa_array, ya_array, tolerance):
     '''
     See overall documentation.
