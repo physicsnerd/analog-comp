@@ -1,10 +1,14 @@
 import math
 from functools import reduce
+import decimal
 #import pigpio
 
 #pi = pigpio.pi()
 
 chop_flag = False
+decimal_flag = False
+
+D = decimal.Decimal if use_decimal else float 
 
 def chop_num(num):
     '''
