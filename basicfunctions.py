@@ -204,6 +204,17 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
             return 5*t_step/288*(19*new_val[-6] + 75*new_val[-5] + 50*new_val[-4] + 50*new_val[-3] + 75*new_val[-2] + 19*new_val[-1]) + init_val
         else:
             return t_step/1440*(27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + 1427*new_val[-2] + 475*new_val[-1]) + integral_val
+    elif typ == 'timevar':
+        if step == 1:
+            return t_step/2*(new_val[-2]+new_val[-1])+init_val
+        elif step == 2:
+            return t_step/3*(new_val[-3] + 4*new_val[-2] + new_val[-1]) + init_val
+        elif step == 3:
+            return t_step/6*(new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]) + integral_val
+        elif step == 4:
+            return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
+        else:
+            return t_step/24*(new_val[-4] - 5*new_val[-3] + 19*new_val[-2] + 9*new_val[-1]) + integral_val
     else:
         return t_step/2*(new_val[-2] + new_val[-1]) + integral_val
 
