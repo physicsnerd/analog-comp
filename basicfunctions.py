@@ -1,3 +1,8 @@
+'''
+Math for square root, reduce from functools for multiplication of every element
+in list, decimal for floating point accuracy, and pigpio for if running on
+Raspberry Pi and wishing to output on oscilloscope.
+'''
 import math
 from functools import reduce
 import decimal
@@ -5,10 +10,10 @@ import decimal
 
 #pi = pigpio.pi()
 
-chop_flag = False
-decimal_flag = False
+CHOP_FLAG = False
+DECIMAL_FLAG = False
 
-D = decimal.Decimal if use_decimal else float 
+D = decimal.Decimal if DECIMAL_FLAG else float
 
 def chop_num(num):
     '''
@@ -17,76 +22,81 @@ def chop_num(num):
     keep it from using scientific notation as otherwise important information
     would be chopped. It returns a float.
     '''
-    num = format(num,'f')#still not working, apparently
+    num = format(num, 'f')#still not working, apparently
     num = num[:15]
     return float(num)
 
 def decorator(func):
+    '''
+    Decorator which uses chop_num to try to reduce floating point error on output
+    of every function. Not currently in use as chop_flag is set to False, as there
+    is an error somewhere.
+    '''
     def wrapper(*args, **kwargs):
         val = func(*args, **kwargs)
-        if chop_flag:
+        if CHOP_FLAG:
             return chop_num(val)
         else:
             return val
     return wrapper
 
 @decorator
-def add(n1, n2, n3=0, n4=0, n5=0):
+def add(n_1, n_2, n_3=0, n_4=0, n_5=0):
     '''
     Takes two to five numbers as input and returns the sum.
     '''
-    return n1+n2+n3+n4+n5
+    return n_1 + n_2 + n_3 + n_4 + n_5
 
 @decorator
-def multiply(n1, n2, n3=1, n4=1, n5=1):
+def multiply(n_1, n_2, n_3=1, n_4=1, n_5=1):
     '''
     Takes two to five numbers as input and returns the product.
     '''
-    return n1*n2*n3*n4*n5
+    return n_1 * n_2 * n_3 * n_4 * n_5
 
 @decorator
-def subtract(n1, n2):
+def subtract(n_1, n_2):
     '''
     Takes two numbers as input and returns the difference. Order matters in input;
     the second input is subtracted from the first.
     '''
-    return n1 - n2
+    return n_1 - n_2
 
 @decorator
-def divide(n1, n2):
+def divide(n_1, n_2):
     '''
     Takes two numbers as input and returns the quotient. Order matters in input;
     the second input is the divisor and the first the dividend.
     '''
-    return n1/n2
+    return n_1/n_2
 
 @decorator
-def square(n1):
+def square(n_1):
     '''
     Takes one number as input which is raised to the second power, or squared.
     '''
-    return n1**2
+    return n_1**2
 
 @decorator
-def power(n1, n2):
+def power(n_1, n_2):
     '''Takes two numbers as input. Order matters in input; the second number is the
     power and the first the base.
     '''
-    return n1**n2
+    return n_1**n_2
 
 @decorator
-def sqroot(n1):
+def sqroot(n_1):
     '''
     Takes one number as input. The square root of that number is returned.
     '''
-    return math.sqrt(abs(n1))
+    return math.sqrt(abs(n_1))
 
 @decorator
-def logalog(n1):
+def logalog(n_1):
     '''
     Takes one number as input, and returns the common log of that input.
     '''
-    return math.log10(n1)
+    return math.log10(n_1)
 
 @decorator
 def summation(vals):
@@ -104,69 +114,76 @@ def mult_summ(vals):
     '''
     return reduce(lambda x, y: x*y, vals)
 
-'''
-@decorator
-def tvar_int_noy2(step, t_step, new_val, integral_val, typ, init_val):
-    if step == 1:
-        return t_step/4*(new_val[-2]+new_val[-1])+init_val
-    elif step == 2:
-        return t_step/6*(new_val[-3] + 4*new_val[-2] + new_val[-1]) + init_val
-    elif step == 3:
-        return t_step/12*(-1*new_val[-4]+8*new_val[-2]+5*new_val[-1]) + integral_val
-    elif step == 4:
-        return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
-    else:
-        return t_step/24*(new_val[-4] - 5*new_val[-3] + 19*new_val[-2] + 9*new_val[-1]) + integral_val
-
-def tvar_int_3stage(step, t_step, new_val, integral_val, typ, init_val):
-    if step == 1:
-        return t_step/8*(new_val[-2]+new_val[-1])+init_val
-    elif step == 2:
-        return t_step/12*(new_val[-3] + 4*new_val[-2] + new_val[-1]) + init_val
-    elif step == 3:
-        return t_step/6*(new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]) + integral_val
-    elif step == 4:
-        return
-    elif step == 5:
-        return
-    elif step == 6:
-        return
-    else:
-        return
-'''
-
-def trap(step, t_step, new_val, init_val):
+def trap(t_step, new_val, init_val):
+    '''
+    Performs the trapezoidal method on a given interval.
+    '''
     return t_step/2*(new_val[-2] + new_val[-1]) + init_val
 
-def simp13(step, t_step, new_val, init_val):
+def simp13(t_step, new_val, init_val):
+    '''
+    Performs the standard simpson 1/3rd method on a given interval.
+    '''
     return t_step/3*(new_val[-3]+4*new_val[-2]+new_val[-1]) + init_val
 
-def simp38(step, t_step, new_val, init_val):
+def simp38(t_step, new_val, init_val):
+    '''
+    Performs the standard simpson 3/8ths method on a given interval.
+    '''
     return 3*t_step/8*(new_val[-4] + 3*new_val[-3] + 3*new_val[-2] + new_val[-1]) + init_val
 
-def boole(step, t_step, new_val, init_val):
-    return 2*t_step/45*(7*new_val[-5] + 32*new_val[-4] + 12*new_val[-3] + 32*new_val[-2] + 7*new_val[-1]) + init_val
+def boole(t_step, new_val, init_val):
+    '''
+    Performs the standard 4th order Newton-Cotes, boole, on a given interval.
+    '''
+    vals = 7*new_val[-5] + 32*new_val[-4] + 12*new_val[-3] + 32*new_val[-2] + 7*new_val[-1]
+    return 2*t_step/45*(vals) + init_val
 
-def fifth(step, t_step, new_val, init_val):
-    return 5*t_step/288*(19*new_val[-6] + 75*new_val[-5] + 50*new_val[-4] + 50*new_val[-3] + 75*new_val[-2] + 19*new_val[-1]) + init_val
+def fifth(t_step, new_val, init_val):
+    '''
+    Performs the standard fifth order Newton-Cotes on a given interval.
+    '''
+    vals_1 = 75*new_val[-2] + 19*new_val[-1]
+    vals = 19*new_val[-6] + 75*new_val[-5] + 50*new_val[-4] + 50*new_val[-3] + vals_1
+    return 5*t_step/288*(vals) + init_val
 
-def trapcum(step, t_step, new_val, integral_val):
+def trapcum(t_step, new_val, integral_val):
+    '''
+    Performs trapezoidal method but adding the full set of previous vals, not just
+    init val.
+    '''
     return t_step/2*(new_val[-2] + new_val[-1]) + integral_val
 
-def simp13cum(step, t_step, new_val, integral_val):
+def simp13cum(t_step, new_val, integral_val):
+    '''
+    Performs cumulative simpson method, also adds integral val as opposed to init.
+    '''
     return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
 
-def simp38cum(step, t_step, new_val, integral_val):
+def simp38cum(t_step, new_val, integral_val):
+    '''
+    Performs cumulative simpson 3/8ths method, also adds integral val as opposed to
+    init.
+    '''
     return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
 
-def boolecum(step, t_step, new_val, integral_val):
-    return t_step/720*(-19*new_val[-5] + 106*new_val[-4] - 264*new_val[-3] + 646*new_val[-2] + 251*new_val[-1]) + integral_val
+def boolecum(t_step, new_val, integral_val):
+    '''
+    Performs cumulative boole method, also adds integral val as opposed to init.
+    '''
+    vals = -19*new_val[-5] + 106*new_val[-4] - 264*new_val[-3] + 646*new_val[-2] + 251*new_val[-1]
+    return t_step/720*(vals) + integral_val
 
-def fifthcum(step, t_step, new_val, integral_val):
-    return t_step/1440*(27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + 1427*new_val[-2] + 475*new_val[-1]) + integral_val
+def fifthcum(t_step, new_val, integral_val):
+    '''
+    Peforms cumulative fifth order method, also adds integral val as opposed to init.
+    '''
+    vals_1 = 1427*new_val[-2] + 475*new_val[-1]
+    vals = 27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + vals_1
+    return t_step/1440*(vals) + integral_val
 
 @decorator
-def integrate(step, t_step, new_val, integral_val, typ, init_val):
+def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     '''
     See overall documentation for full explanation. Typ is an extra flag, short
     for type (type() is a built-in so that is not used), to indicate whether
@@ -174,59 +191,66 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
     ('simp38'),the boole method ('boole'), or a 5th order Newton-Cotes ('5th')
     or the trapezoidal method ('trap').
     '''
+    if typ != 'timevar':
+        time.append(t_step*step)
     if typ == 'simp' or typ == 'simp13':
         if step == 1:
-            return trap(step, t_step, new_val, init_val)
+            return (trap(t_step, new_val, init_val), time)
         elif step == 2:
-            return simp13(step, t_step, new_val, init_val)
+            return (simp13(t_step, new_val, init_val), time)
         else:
-            simp13cum(step, t_step, new_val, integral_val)
+            return (simp13cum(t_step, new_val, integral_val), time)
     elif typ == 'simp38':
         if step == 1:
-            return trap(step, t_step, new_val, init_val)
+            return (trap(t_step, new_val, init_val), time)
         elif step == 2:
-            return simp13(step, t_step, new_val, init_val)
+            return (simp13(t_step, new_val, init_val), time)
         elif step == 3:
-            return simp38(step, t_step, new_val, init_val)
+            return (simp38(t_step, new_val, init_val), time)
         else:
-            return simp38cum(step, t_step, new_val, integral_val)
+            return (simp38cum(t_step, new_val, integral_val), time)
     elif typ == 'boole':
         if step == 1:
-            return trap(step, t_step, new_val, init_val)
+            return (trap(t_step, new_val, init_val), time)
         elif step == 2:
-            return simp13(step, t_step, new_val, init_val)
+            return (simp13(t_step, new_val, init_val), time)
         elif step == 3:
-            return simp38(step, t_step, new_val, init_val)
+            return (simp38(t_step, new_val, init_val), time)
         elif step == 4:
-            return boole(step, t_step, new_val, init_val)
+            return (boole(t_step, new_val, init_val), time)
         else:
-            return boolecum(step, t_step, new_val, integral_val)
+            return (boolecum(t_step, new_val, integral_val), time)
     elif typ == '5th':
         if step == 1:
-            return trap(step, t_step, new_val, init_val)
+            return (trap(t_step, new_val, init_val), time)
         elif step == 2:
-            return simp13(step, t_step, new_val, init_val)
+            return (simp13(t_step, new_val, init_val), time)
         elif step == 3:
-            return simp38(step, t_step, new_val, init_val)
+            return (simp38(t_step, new_val, init_val), time)
         elif step == 4:
-            return boole(step, t_step, new_val, init_val)
+            return (boole(t_step, new_val, init_val), time)
         elif step == 5:
-            return fifth(step, t_step, new_val, init_val)
+            return (fifth(t_step, new_val, init_val), time)
         else:
-            return fifthcum(step, t_step, new_val, integral_val)
+            return (fifthcum(t_step, new_val, integral_val), time)
     elif typ == 'timevar':
         if step == 1:
-            return trap(step, t_step, new_val, init_val)
+            time.append(t_step/2)
+            return (trap(t_step, new_val, init_val), time)
         elif step == 2:
-            return simp13(step, t_step, new_val, init_val)
+            time.append(t_step/2)
+            return (simp13(t_step, new_val, init_val), time)
         elif step == 3:
-            return t_step/6*(new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]) + integral_val 
+            time.append(t_step+time[-1])
+            vals = new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]
+            return (t_step/6*(vals) + integral_val, time)
         elif step == 4:
-            return simp13cum(step, t_step, new_val, integral_val)
+            time.append(t_step+time[-1])
+            return (simp13cum(t_step, new_val, integral_val), time)
         else:
-            return simp38cum(step, t_step, new_val, integral_val)
+            return (simp38cum(t_step, new_val, integral_val), time)
     else:
-        return trap(step, t_step, new_val, init_val)
+        return (trap(t_step, new_val, init_val), time)
 
 
 @decorator
