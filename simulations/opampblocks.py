@@ -10,7 +10,6 @@ pi.set_PWM_frequency(27, 100)
 
 def integrate(t_step, val_array, integral_val):
     return (t_step/2)* (val_array[-1] + val_array[-2]) + integral_val
-    #return (t_step * (val_array[-1] + val_array[-2]) / 2) + integral_val
 
 def pwm_map(val, mini, maxi, pwm_res):
     scale_fac = (2**pwm_res)-1
@@ -68,6 +67,5 @@ while step <= max_steps:
     step+=1
 plt.plot(time, integral_array, 'bs', time, integral2_array, 'r--')
 plt.show()
-#time, signal_array, 'r--', 
 
 pi.stop()
