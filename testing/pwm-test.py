@@ -1,9 +1,12 @@
 import RPi.GPIO as GPIO
 import time
+
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(27, GPIO.OUT)
+
 test_pwm = GPIO.PWM(27, 100)
 test_pwm.start(0)
+
 step = 1
 d = 0
 while 1 == 1:

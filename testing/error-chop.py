@@ -4,7 +4,7 @@ def error_chop(num):
     return float(num)
 
 step = 1
-x = 2.3532
+x = 2.353223423254354
 y = 5.4234
 
 while step <= 100:
