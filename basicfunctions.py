@@ -135,7 +135,7 @@ def tvar_int_3stage(step, t_step, new_val, integral_val, typ, init_val):
         return
 '''
 
-def trapezoidal(step, t_step, new_val, init_val):
+def trap(step, t_step, new_val, init_val):
     return t_step/2*(new_val[-2] + new_val[-1]) + init_val
 
 def simp13(step, t_step, new_val, init_val):
@@ -176,14 +176,17 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
     '''
     if typ == 'simp' or typ == 'simp13':
         if step == 1:
-            return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            #return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            return trap(step, t_step, new_val, init_val)
         elif step == 2:
-            return t_step/3*(new_val[-3]+4*new_val[-2]+new_val[-1]) + init_val
+            #return t_step/3*(new_val[-3]+4*new_val[-2]+new_val[-1]) + init_val
+            return simp13cum(step, t_step, new_val, integral_val)
         else:
             return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
     elif typ == 'simp38':
         if step == 1:
-            return t_step/2*(new_val[-2] + new_val[-1])+init_val
+            #return t_step/2*(new_val[-2] + new_val[-1])+init_val
+            return trap(step, t_step, new_val, init_val)
         elif step == 2:
             array_values = new_val[-3]+4*new_val[-2]+new_val[-1]
             return t_step/3*(array_values) + init_val
@@ -197,7 +200,8 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
             return t_step/24*(values1 + values2) + integral_val
     elif typ == 'boole':
         if step == 1:
-            return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            #return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            return trap(step, t_step, new_val, init_val)
         elif step == 2:
             array_values = new_val[-3]+4*new_val[-2]+new_val[-1]
             return t_step/3*(array_values) + init_val
@@ -209,7 +213,8 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
             return t_step/720*(-19*new_val[-5] + 106*new_val[-4] - 264*new_val[-3] + 646*new_val[-2] + 251*new_val[-1]) + integral_val
     elif typ == '5th':
         if step == 1:
-            return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            #return t_step/2*(new_val[-2] + new_val[-1]) + init_val
+            return trap(step, t_step, new_val, init_val)
         elif step == 2:
             array_values = new_val[-3]+4*new_val[-2]+new_val[-1]
             return t_step/3*(array_values) + init_val
@@ -223,7 +228,8 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
             return t_step/1440*(27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + 1427*new_val[-2] + 475*new_val[-1]) + integral_val
     elif typ == 'timevar':
         if step == 1:
-            return t_step/2*(new_val[-2]+new_val[-1])+init_val
+            #return t_step/2*(new_val[-2]+new_val[-1])+init_val
+            return trap(step, t_step, new_val, init_val)
         elif step == 2:
             return t_step/3*(new_val[-3] + 4*new_val[-2] + new_val[-1]) + init_val
         elif step == 3:
