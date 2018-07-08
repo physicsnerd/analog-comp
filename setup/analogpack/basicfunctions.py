@@ -207,9 +207,9 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
     command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
     default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum}
-    try:
+    if step in command[typ].keyValues():
         return command[typ][step](t_step, new_val, init_val)
-    except KeyError:
+    else:
         return default_command[typ](t_step, new_val, integral_val)
 
 @decorator
