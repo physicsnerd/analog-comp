@@ -231,11 +231,11 @@ def pwm_map(val, mini, maxi, pwm_res):
     '''
     scale_fac = (2**pwm_res)-1
     if mini < 0:
-        x = val + (0 - mini)
-        return round(x/(maxi-mini)*scale_fac)
+        range_spot = val + (0 - mini)
+        return round(range_spot/(maxi-mini)*scale_fac)
     else:
-        x = val - mini
-        return round(x/(maxi-mini)*scale_fac)
+        range_spot = val - mini
+        return round(range_spot/(maxi-mini)*scale_fac)
 
 def step_vary(xv_array, yv_array, xa_array, ya_array, tolerance):
     '''
