@@ -202,7 +202,7 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
             time.append(t_step + time[-1])
     command = {}
     command['trap'] = {1:trap}
-    command['simp13'] = {1:trap, 2:simp13,}
+    command['simp13'] = {1:trap, 2:simp13}
     command['simp38'] = {1:trap, 2:simp13, 3:simp38}
     command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
     command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
