@@ -1,8 +1,7 @@
-import basicfunctions as b
 import matplotlib.pyplot as plt
 import math
 from tabulate import tabulate
-
+from analogpack import basicfunctions as b
 
 k = 78.125
 m = 78.125
@@ -40,7 +39,7 @@ for i in methods:
     velocity_val = 0
     time = []
     while step <= max_steps:
-        time.append(t_step*step)
+        #time.append(t_step*step)
         #if step == 3:
            # t_step = t_step*2
         if step == 0:
@@ -54,7 +53,7 @@ for i in methods:
             signal_array.append(signal)
 
             #t_step = t_step/2
-            #time.append(0)
+            time.append(0)
         elif step == 1:
             #time.append(time[-1]+t_step)
             
@@ -64,10 +63,14 @@ for i in methods:
             signal = b.subtract(b.multiply(-2,omega,zeta,velocity_val), b.multiply(b.square(omega),position_val))
             signal_array.append(signal)
             
-            velocity_val = b.integrate(step, t_step, signal_array, velocity_val, i, velocity_init)
+            integrate_result_vel = b.integrate(step, t_step, signal_array, velocity_val, i, velocity_init, time)
+            velocity_val = integrate_result_vel[0]
+            time = integrate_result_vel[1]
             velocity_array.append(velocity_val)
             
-            position_val = b.integrate(step, t_step, velocity_array, position_val, i, position_init)
+            integrate_result_pos = b.integrate(step, t_step, velocity_array, position_val, i, position_init, time)
+            position_val = integrate_result_pos[0]
+            time = integrate_result_vel[1]
             position_array.append(position_val)
         else:
             #time.append(time[-1]+t_step)
@@ -75,10 +78,14 @@ for i in methods:
             signal = b.subtract(b.multiply(-2,omega,zeta,velocity_val), b.multiply(b.square(omega),position_val))
             signal_array.append(signal)
             
-            velocity_val = b.integrate(step, t_step, signal_array, velocity_val, i, velocity_init)
+            integrate_result_vel = b.integrate(step, t_step, signal_array, velocity_val, i, velocity_init, time)
+            velocity_val = integrate_result_vel[0]
+            time = integrate_result_vel[1]
             velocity_array.append(velocity_val)
             
-            position_val = b.integrate(step, t_step, velocity_array, position_val, i, position_init)
+            integrate_result_pos = b.integrate(step, t_step, velocity_array, position_val, i, position_init, time)
+            position_val = integrate_result_pos[0]
+            time = integrate_result_pos[1]
             position_array.append(position_val)
             
         step+=1

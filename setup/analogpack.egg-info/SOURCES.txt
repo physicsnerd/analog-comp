@@ -1,0 +1,7 @@
+setup.py
+analogpack/__init__.py
+analogpack/basicfunctions.py
+analogpack.egg-info/PKG-INFO
+analogpack.egg-info/SOURCES.txt
+analogpack.egg-info/dependency_links.txt
+analogpack.egg-info/top_level.txt
