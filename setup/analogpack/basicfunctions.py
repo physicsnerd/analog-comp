@@ -191,15 +191,16 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     ('simp38'),the boole method ('boole'), or a 5th order Newton-Cotes ('5th')
     or the trapezoidal method ('trap').
     '''
-    if typ != 'timevar':
-        time.append(t_step*step)
-    else:
-        if step == 1:
-            time.append(t_step/2)
-        elif step == 2:
-            time.append(t_step/2 + time[-1])
+    if len(time) < step:
+        if typ != 'timevar':
+            time.append(t_step*step)
         else:
-            time.append(t_step + time[-1])
+            if step == 1:
+                time.append(t_step/2)
+            elif step == 2:
+                time.append(t_step/2 + time[-1])
+            else:
+                time.append(t_step + time[-1])
     command = {}
     command['trap'] = {1:trap}
     command['simp13'] = {1:trap, 2:simp13}
