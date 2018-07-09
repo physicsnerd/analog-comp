@@ -19,29 +19,29 @@ y_velocity_sum = 0
 x_acceleration_sum = 0
 y_acceleration_sum = 0
 
-t=0
-while t <= max_time: 
+t = 0
+while t <= max_time:
     x_electric = electric_scalar*x_pos/((x_pos**2 + y_pos**2)**(3/2))
     y_electric = electric_scalar*y_pos/((x_pos**2 + y_pos**2)**(3/2))
 
     x_acceleration = -1*e_m*((axial_mag*y_velocity) - x_electric)
     y_acceleration = e_m*((axial_mag*x_velocity) - y_electric)
 
-    x_acceleration_sum+=x_acceleration*(10**(-9))
-    y_acceleration_sum+=y_acceleration*(10**(-9))
+    x_acceleration_sum += x_acceleration*(10**(-9))
+    y_acceleration_sum += y_acceleration*(10**(-9))
     x_velocity = x_acceleration_sum
     y_velocity = y_acceleration_sum
 
-    x_velocity_sum+=x_velocity*(10**(-9))
-    y_velocity_sum+=y_velocity*(10**(-9))
+    x_velocity_sum += x_velocity*(10**(-9))
+    y_velocity_sum += y_velocity*(10**(-9))
     x_pos = (x_velocity_sum)
     y_pos = (y_velocity_sum)
     x_positions.append(x_pos)
     y_positions.append(y_pos)
-    
-    t+=1
 
-plt.plot(x_positions,y_positions)
+    t += 1
+
+plt.plot(x_positions, y_positions)
 plt.xlabel('x positions')
 plt.ylabel('y positions')
 plt.show()

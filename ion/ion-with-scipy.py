@@ -40,8 +40,8 @@ while step <= max_steps:
 
     print(x_position_integral[-1])
     print(y_position_integral[-1])
-    
-    step+=1
+
+    step += 1
 
 plt.plot(x_position_integral, y_position_integral)
 plt.xlabel('x position')
