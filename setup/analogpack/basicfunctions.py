@@ -189,7 +189,8 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     for type (type() is a built-in so that is not used), to indicate whether
     the user wants the simpson method ('simp'), the 3/8ths simpson method
     ('simp38'),the boole method ('boole'), or a 5th order Newton-Cotes ('5th')
-    or the trapezoidal method ('trap').
+    or the trapezoidal method ('trap'). Also handles time by warping the space
+    around you.
     '''
     if len(time) < step:
         if typ != 'timevar':
