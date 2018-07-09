@@ -182,15 +182,35 @@ def fifthcum(t_step, new_val, integral_val):
     vals = 27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + vals_1
     return t_step/1440*(vals) + integral_val
 
-#@decorator - won't work here as output is tuple...split time handling out of this function?
-def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
+def simp13spec(t_step, new_val, integral_val):
+    vals = new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1] 
+    return t_step/6*(vals) + integral_val
+
+@decorator
+def integrate(step, t_step, new_val, integral_val, typ, init_val):
     '''
     See overall documentation for full explanation. Typ is an extra flag, short
     for type (type() is a built-in so that is not used), to indicate whether
     the user wants the simpson method ('simp'), the 3/8ths simpson method
     ('simp38'),the boole method ('boole'), or a 5th order Newton-Cotes ('5th')
-    or the trapezoidal method ('trap'). Also handles time by warping the space
-    around you.
+    or the trapezoidal method ('trap').
+    '''
+    command = {}
+    command['trap'] = {1:trap}
+    command['simp13'] = {1:trap, 2:simp13}
+    command['simp38'] = {1:trap, 2:simp13, 3:simp38}
+    command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
+    command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
+    command['timevary'] = {1:trap, 2:simp13, 3:simp13spec, 4:simp13cum}
+    default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum, 'timevary':simp38cum}
+    if step in command[typ].keys():
+        return command[typ][step](t_step, new_val, init_val)
+    else:
+        return default_command[typ](t_step, new_val, integral_val)
+
+def time_handle(step, t_step, time, typ):
+    '''
+    Handles time by warping the space around you.
     '''
     if len(time) < (step + 1):
         if typ != 'timevar':
@@ -202,19 +222,7 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
                 time.append(t_step/2 + time[-1])
             else:
                 time.append(t_step + time[-1])
-    
-    command = {}
-    command['trap'] = {1:trap}
-    command['simp13'] = {1:trap, 2:simp13}
-    command['simp38'] = {1:trap, 2:simp13, 3:simp38}
-    command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
-    command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
-    default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum}
-    if step in command[typ].keys():
-        print('adding init')
-        return (command[typ][step](t_step, new_val, init_val), time)
-    else:
-        return (default_command[typ](t_step, new_val, integral_val), time)
+    return time
 
 @decorator
 def derivative(val, t_step):
