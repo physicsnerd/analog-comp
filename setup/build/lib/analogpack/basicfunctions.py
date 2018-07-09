@@ -182,76 +182,39 @@ def fifthcum(t_step, new_val, integral_val):
     vals = 27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + vals_1
     return t_step/1440*(vals) + integral_val
 
-@decorator
+#@decorator - won't work here as output is tuple...split time handling out of this function?
 def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     '''
     See overall documentation for full explanation. Typ is an extra flag, short
     for type (type() is a built-in so that is not used), to indicate whether
     the user wants the simpson method ('simp'), the 3/8ths simpson method
     ('simp38'),the boole method ('boole'), or a 5th order Newton-Cotes ('5th')
-    or the trapezoidal method ('trap').
+    or the trapezoidal method ('trap'). Also handles time by warping the space
+    around you.
     '''
-    if typ != 'timevar':
-        time.append(t_step*step)
-    if typ == 'simp' or typ == 'simp13':
-        if step == 1:
-            return (trap(t_step, new_val, init_val), time)
-        elif step == 2:
-            return (simp13(t_step, new_val, init_val), time)
+    if len(time) < (step + 1):
+        if typ != 'timevar':
+            time.append(time[-1]+t_step)
         else:
-            return (simp13cum(t_step, new_val, integral_val), time)
-    elif typ == 'simp38':
-        if step == 1:
-            return (trap(t_step, new_val, init_val), time)
-        elif step == 2:
-            return (simp13(t_step, new_val, init_val), time)
-        elif step == 3:
-            return (simp38(t_step, new_val, init_val), time)
-        else:
-            return (simp38cum(t_step, new_val, integral_val), time)
-    elif typ == 'boole':
-        if step == 1:
-            return (trap(t_step, new_val, init_val), time)
-        elif step == 2:
-            return (simp13(t_step, new_val, init_val), time)
-        elif step == 3:
-            return (simp38(t_step, new_val, init_val), time)
-        elif step == 4:
-            return (boole(t_step, new_val, init_val), time)
-        else:
-            return (boolecum(t_step, new_val, integral_val), time)
-    elif typ == '5th':
-        if step == 1:
-            return (trap(t_step, new_val, init_val), time)
-        elif step == 2:
-            return (simp13(t_step, new_val, init_val), time)
-        elif step == 3:
-            return (simp38(t_step, new_val, init_val), time)
-        elif step == 4:
-            return (boole(t_step, new_val, init_val), time)
-        elif step == 5:
-            return (fifth(t_step, new_val, init_val), time)
-        else:
-            return (fifthcum(t_step, new_val, integral_val), time)
-    elif typ == 'timevar':
-        if step == 1:
-            time.append(t_step/2)
-            return (trap(t_step, new_val, init_val), time)
-        elif step == 2:
-            time.append(t_step/2)
-            return (simp13(t_step, new_val, init_val), time)
-        elif step == 3:
-            time.append(t_step+time[-1])
-            vals = new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]
-            return (t_step/6*(vals) + integral_val, time)
-        elif step == 4:
-            time.append(t_step+time[-1])
-            return (simp13cum(t_step, new_val, integral_val), time)
-        else:
-            return (simp38cum(t_step, new_val, integral_val), time)
+            if step == 1:
+                time.append(t_step/2)
+            elif step == 2:
+                time.append(t_step/2 + time[-1])
+            else:
+                time.append(t_step + time[-1])
+    
+    command = {}
+    command['trap'] = {1:trap}
+    command['simp13'] = {1:trap, 2:simp13}
+    command['simp38'] = {1:trap, 2:simp13, 3:simp38}
+    command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
+    command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
+    default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum}
+    if step in command[typ].keys():
+        print('adding init')
+        return (command[typ][step](t_step, new_val, init_val), time)
     else:
-        return (trap(t_step, new_val, init_val), time)
-
+        return (default_command[typ](t_step, new_val, integral_val), time)
 
 @decorator
 def derivative(val, t_step):
@@ -272,11 +235,11 @@ def pwm_map(val, mini, maxi, pwm_res):
     '''
     scale_fac = (2**pwm_res)-1
     if mini < 0:
-        x = val + (0 - mini)
-        return round(x/(maxi-mini)*scale_fac)
+        range_spot = val + (0 - mini)
+        return round(range_spot/(maxi-mini)*scale_fac)
     else:
-        x = val - mini
-        return round(x/(maxi-mini)*scale_fac)
+        range_spot = val - mini
+        return round(range_spot/(maxi-mini)*scale_fac)
 
 def step_vary(xv_array, yv_array, xa_array, ya_array, tolerance):
     '''

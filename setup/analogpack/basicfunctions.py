@@ -182,7 +182,7 @@ def fifthcum(t_step, new_val, integral_val):
     vals = 27*new_val[-6] - 173*new_val[-5] + 482*new_val[-4] - 798*new_val[-3] + vals_1
     return t_step/1440*(vals) + integral_val
 
-@decorator
+#@decorator - won't work here as output is tuple...split time handling out of this function?
 def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     '''
     See overall documentation for full explanation. Typ is an extra flag, short
@@ -192,9 +192,9 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     or the trapezoidal method ('trap'). Also handles time by warping the space
     around you.
     '''
-    if len(time) < step:
+    if len(time) < (step + 1):
         if typ != 'timevar':
-            time.append(t_step*step)
+            time.append(time[-1]+t_step)
         else:
             if step == 1:
                 time.append(t_step/2)
@@ -202,6 +202,7 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
                 time.append(t_step/2 + time[-1])
             else:
                 time.append(t_step + time[-1])
+    
     command = {}
     command['trap'] = {1:trap}
     command['simp13'] = {1:trap, 2:simp13}
@@ -209,10 +210,11 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val, time):
     command['boole'] = {1:trap, 2:simp13, 3:simp38, 4:boole}
     command['5th'] = {1:trap, 2:simp13, 3:simp38, 4:boole, 5:fifth}
     default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum}
-    if step in command[typ].keyValues():
-        return command[typ][step](t_step, new_val, init_val)
+    if step in command[typ].keys():
+        print('adding init')
+        return (command[typ][step](t_step, new_val, init_val), time)
     else:
-        return default_command[typ](t_step, new_val, integral_val)
+        return (default_command[typ](t_step, new_val, integral_val), time)
 
 @decorator
 def derivative(val, t_step):
