@@ -83,7 +83,7 @@ while step <= max_steps:
         dac.setVoltage(0, b.pwm_map(0, -3, 3, 12))
         dac.setVoltage(1, b.pwm_map(0, -3, 3, 12))
 
-    if step % 1000 == 0:
+    if step % 100 == 0:
         x_position_array.append(x_position_integral)
         y_position_array.append(y_position_integral)
         dac.setVoltage(0, b.pwm_map(y_position_integral, -3, 3, 12))
