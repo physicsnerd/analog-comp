@@ -64,4 +64,41 @@ try:
 except:
     errors['list'] = 'y'
 
+print(errors)
+
 #b.multiply tests
+def multiply_tests_correct():
+    basic = b.multiply(2, 2)
+    float_mult = b.multiply(2.4, 3.6)
+    long = b.multiply(2, 3, 4, 5, 6)
+    negative = b.multiply(2, -3)
+    return [basic, float_mult, long, negative]
+
+assert multiply_tests_correct() == [4, 8.64, 720, -6]
+
+errors = {'short':'n', 'long':'n', 'string':'n', 'list':'n'}
+
+try:
+    b.multiply(1)
+except:
+    errors['short'] = 'y'
+
+try:
+    b.multiply(1, 2, 3, 4, 5, 6)
+except:
+    errors['long'] = 'y'
+
+try:
+    b.multiply('hi', 'bye')
+except:
+    errors['string'] = 'y'
+
+try:
+    b.multiply([1], [2])
+except:
+    errors['list'] = 'y'
+
+print(errors)
+
+#b.divide tests
+
