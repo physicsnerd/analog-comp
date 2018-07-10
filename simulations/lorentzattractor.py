@@ -1,9 +1,14 @@
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+#import matplotlib.pyplot as plt
+#from mpl_toolkits.mplot3d import Axes3D
 from analogpack import basicfunctions as b
 
-fig = plt.figure()
-ax = Axes3D(fig)
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
+from MCP4922 import MCP4922
+dac = MCP4922(spibus=0,spidevice=0,cs=8)
+
+#fig = plt.figure()
+#ax = Axes3D(fig)
 
 signal_x = 0
 signal_x_array = []
@@ -39,6 +44,9 @@ while step <= max_steps:
         y_pos = y_init
         z_pos = z_init
 
+        dac.setVoltage(1, b.pwm_map(x_pos, -25, 25, 12))
+        dac.setVoltage(0, b.pwm_map(y_pos, -32, 32, 12))
+
         x_pos_array.append(x_pos)
         y_pos_array.append(y_pos)
         z_pos_array.append(z_pos)
@@ -67,7 +75,14 @@ while step <= max_steps:
         y_pos_array.append(y_pos)
         z_pos_array.append(z_pos)
 
+        dac.setVoltage(0, b.pwm_map(y_pos, -32, 32, 12))
+        dac.setVoltage(1, b.pwm_map(x_pos, -25, 25, 12))
+
     step += 1
 
-ax.plot(x_pos_array, y_pos_array, z_pos_array)
-plt.show()
+#ax.plot(x_pos_array, y_pos_array, z_pos_array)
+#plt.show()
+    
+dac.shutdown(0)
+dac.shutdown(1)
+GPIO.cleanup()
