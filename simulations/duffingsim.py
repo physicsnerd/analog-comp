@@ -1,4 +1,4 @@
-import basicfunctions as b
+from analogpack import basicfunctions as b
 import matplotlib.pyplot as plt
 
 delta =
