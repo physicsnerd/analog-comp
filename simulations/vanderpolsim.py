@@ -22,8 +22,6 @@ max_steps = 4000
 method = 'simp38'
 
 while step <= max_steps:
-    #time.append(t_step*step)
-
     if step == 0:
         v_pos = v_init
         x_pos = x_init
