@@ -1,5 +1,8 @@
 #import matplotlib.pyplot as plt
 #from mpl_toolkits.mplot3d import Axes3D
+import sys
+sys.path = ['/usr/lib/python35.zip', '/usr/lib/python3.5', '/usr/lib/python3.5/plat-arm-linux-gnueabihf', '/usr/lib/python3.5/lib-dynload', '/home/pi/.local/lib/python3.5/site-packages', '/usr/local/lib/python3.5/dist-packages', '/usr/local/lib/python3.5/dist-packages/RPIO-0.10.0-py3.5-linux-armv7l.egg', '/usr/local/lib/python3.5/dist-packages/analogpack-0.0-py3.5.egg', '/usr/lib/python3/dist-packages']
+
 from analogpack import basicfunctions as b
 
 import RPi.GPIO as GPIO
@@ -33,7 +36,7 @@ z_pos_array = []
 
 step = 0
 t_step = .01
-max_steps = 4000
+max_steps = 40000000
 time = []
 
 method = 'simp38'
