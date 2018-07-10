@@ -165,7 +165,7 @@ def simp38cum(t_step, new_val, integral_val):
     Performs cumulative simpson 3/8ths method, also adds integral val as opposed to
     init.
     '''
-    return t_step/12*(-1*new_val[-3]+8*new_val[-2]+5*new_val[-1]) + integral_val
+    return t_step/24*(new_val[-4]-5*new_val[-3]+19*new_val[-2]+9*new_val[-1]) + integral_val
 
 def boolecum(t_step, new_val, integral_val):
     '''
