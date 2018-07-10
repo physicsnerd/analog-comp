@@ -35,7 +35,7 @@ y_acceleration = 0
 x_acceleration_array = []
 y_acceleration_array = []
 
-t_step = 10**(-5)
+t_step = 10**(-4)
 step = 0
 
 pos_mini = -.015
@@ -80,14 +80,14 @@ while step <= max_steps:
         y_position_array.append(y_pos)
         y_velocity_array.append(0)
         x_velocity_array.append(0)
-        dac.setVoltage(0, b.pwm_map(0, -.015, .015, 12))
-        dac.setVoltage(1, b.pwm_map(0, -.015, .015, 12))
+        dac.setVoltage(0, b.pwm_map(0, -3, 3, 12))
+        dac.setVoltage(1, b.pwm_map(0, -3, 3, 12))
 
     if step % 1000 == 0:
         x_position_array.append(x_position_integral)
         y_position_array.append(y_position_integral)
-        dac.setVoltage(0, b.pwm_map(y_position_integral, -.015, .015, 12))
-        dac.setVoltage(1, b.pwm_map(x_position_integral, -.015, .015, 12))
+        dac.setVoltage(0, b.pwm_map(y_position_integral, -3, 3, 12))
+        dac.setVoltage(1, b.pwm_map(x_position_integral, -3, 3, 12))
   
     if step % 1000000 == 0:
         print(step)
