@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import sys
 sys.path = ['/usr/lib/python35.zip', '/usr/lib/python3.5', '/usr/lib/python3.5/plat-arm-linux-gnueabihf', '/usr/lib/python3.5/lib-dynload', '/home/pi/.local/lib/python3.5/site-packages', '/usr/local/lib/python3.5/dist-packages', '/usr/local/lib/python3.5/dist-packages/RPIO-0.10.0-py3.5-linux-armv7l.egg', '/usr/local/lib/python3.5/dist-packages/analogpack-0.0-py3.5.egg', '/usr/lib/python3/dist-packages']
 
@@ -8,13 +9,13 @@ GPIO.setmode(GPIO.BCM)
 from MCP4922 import MCP4922
 dac = MCP4922(spibus=0,spidevice=0,cs=8)
 
-x_pos = .01
+x_pos = 3#.01
 y_pos = 0
-axial_mag = .1
-elect_pot = 1
-max_steps = 2500000
+axial_mag = 1#.1
+elect_pot = 3#1
+max_steps = 2000000
 
-e_m = -1*47917945.397795496
+e_m = -1#*47917945.397795496
 
 x_position_integral = x_pos
 y_position_integral = y_pos
@@ -34,7 +35,7 @@ y_acceleration = 0
 x_acceleration_array = []
 y_acceleration_array = []
 
-t_step = 10**(-12)
+t_step = 10**(-5)
 step = 0
 
 pos_mini = -.015
@@ -44,7 +45,7 @@ pwm_res = 8
 integral_type = 'simp38'
 
 while step <= max_steps:
-    electric_denominator = b.power(b.add(b.square(x_position_integral), b.square(y_position_integral)), 1.5)
+    electric_denominator = 1 #b.power(b.add(b.square(x_position_integral), b.square(y_position_integral)), 1.5)
     x_electric = b.divide(b.multiply(elect_pot, x_position_integral), electric_denominator)
     y_electric = b.divide(b.multiply(elect_pot, y_position_integral), electric_denominator)
 
@@ -73,8 +74,6 @@ while step <= max_steps:
         #t_step = b.step_vary(x_velocity_array, y_velocity_array, x_acceleration_array, y_acceleration_array,.000075)
         #time = []
         #t_step = b.time_handle(step, t_step, time, integral_type)[1]
-        dac.setVoltage(0, b.pwm_map(y_position_integral, -.015, .015, 12))
-        dac.setVoltage(1, b.pwm_map(x_position_integral, -.015, .015, 12))
 
     else:
         x_position_array.append(x_pos)
@@ -87,6 +86,8 @@ while step <= max_steps:
     if step % 1000 == 0:
         x_position_array.append(x_position_integral)
         y_position_array.append(y_position_integral)
+        dac.setVoltage(0, b.pwm_map(y_position_integral, -.015, .015, 12))
+        dac.setVoltage(1, b.pwm_map(x_position_integral, -.015, .015, 12))
   
     if step % 1000000 == 0:
         print(step)
@@ -96,3 +97,7 @@ while step <= max_steps:
 dac.shutdown(0)
 dac.shutdown(1)
 GPIO.cleanup()
+plt.plot(x_position_array, y_position_array)
+plt.xlabel('x position')
+plt.ylabel('y position')
+plt.show()
