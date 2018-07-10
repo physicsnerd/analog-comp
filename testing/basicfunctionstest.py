@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 from tabulate import tabulate
 
-methods = ['trap', 'simp38','timevary']
+methods = ['trap', 'simp13', 'timevary']#'simp38', 
 
 #functions = [x**4, ln(1+x), sqrt(x), sin(x)^2, e^(-x)-e^(-x)*(1+x) (needs init of 1)]
 
@@ -25,14 +25,15 @@ for i in methods:
     
     time = []
     while step <= max_steps:
-        #time.append(t_step*step)
         if step == 0:
             position_val = position_init
             position_array.append(position_val)
             time.append(0)
             signal_array.append(signal)
         else:
-            time = b.time_handle(step, t_step, time, i)
+            time_vals = b.time_handle(step, t_step, time, i)
+            time = time_vals[0]
+            t_step = time_vals[1]
             #signal = math.exp(-time[-1])-math.exp(-1*time[-1])*(1+time[-1])
             #signal = math.sin(time[-1])**2
             #signal = math.sqrt(time[-1])
@@ -46,10 +47,11 @@ for i in methods:
         step+=1
     results[i] = position_array
     times[i] = time
-actual = []
+    
 actuals = {}
 
 for i in times:
+    actual = []
     for t in times[i]:
         #val = (t-(math.sin(2*t)/2))/2#(-1*math.sin(2*t)-2*t)/4
         #val = (t+1)*math.exp(-1*t)
@@ -69,8 +71,6 @@ for i in results:
     avg_error.append(sum(error))
 
 print(list(zip(results.keys(), avg_error)))
-
-#print(tabulate(zip(time, signal_array, results['trap'], actual, errors[0]), headers=['Time', 'signal', 'integrate()', 'actual', 'error']))
-
-plt.plot(times['trap'], errors[0], 'r', times['simp38'], errors[1], 'g', times['timevary'], errors[2], 'k')#, time, errors[3], 'c', time, errors[4], 'y')
+#print(tabulate(zip(times['timevary'], signal_array, results['timevary'], actuals['timevary'], errors[2]), headers=['Time', 'signal', 'integrate()', 'actual', 'error']))
+plt.plot(times['trap'], errors[0], 'r', times['simp13'], errors[1], 'g', times['timevary'], errors[2], 'k')#, time, errors[3], 'c', time, errors[4], 'y')
 plt.show()
