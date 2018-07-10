@@ -213,7 +213,7 @@ def time_handle(step, t_step, time, typ):
     Handles time by warping the space around you.
     '''
     if len(time) < (step + 1):
-        if typ != 'timevar':
+        if typ != 'timevary':
             time.append(time[-1]+t_step)
         else:
             if step == 1:
