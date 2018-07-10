@@ -1,5 +1,5 @@
-import basicfunctions as b
 import matplotlib.pyplot as plt
+from analogpack import basicfunctions as b
 
 x_pos = .01
 y_pos = 0
@@ -64,6 +64,8 @@ while step <= max_steps:
         y_position_integral = b.integrate(step, t_step, y_velocity_array, y_position_integral, integral_type, y_pos)
 
         #t_step = b.step_vary(x_velocity_array, y_velocity_array, x_acceleration_array, y_acceleration_array,.000075)
+        #time = []
+        #t_step = b.time_handle(step, t_step, time, integral_type)[1]
 
     else:
         x_position_array.append(x_pos)
