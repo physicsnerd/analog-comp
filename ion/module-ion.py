@@ -38,11 +38,11 @@ integral_type = 'simp38'
 
 while step <= max_steps:
     electric_denominator = b.power(b.add(b.square(x_position_integral), b.square(y_position_integral)), 1.5)
-    x_electric = b.divide(b.multiply(elect_pot,x_position_integral),electric_denominator)
-    y_electric = b.divide(b.multiply(elect_pot,y_position_integral),electric_denominator)
+    x_electric = b.divide(b.multiply(elect_pot, x_position_integral), electric_denominator)
+    y_electric = b.divide(b.multiply(elect_pot, y_position_integral), electric_denominator)
 
-    x_acceleration = b.multiply(e_m,b.add(x_electric,b.multiply(axial_mag,y_velocity_integral)))
-    y_acceleration = b.multiply(e_m,b.subtract(y_electric, b.multiply(axial_mag,x_velocity_integral)))
+    x_acceleration = b.multiply(e_m, b.add(x_electric, b.multiply(axial_mag, y_velocity_integral)))
+    y_acceleration = b.multiply(e_m, b.subtract(y_electric, b.multiply(axial_mag, x_velocity_integral)))
 
     x_acceleration_array.append(x_acceleration)
     y_acceleration_array.append(y_acceleration)
@@ -51,8 +51,8 @@ while step <= max_steps:
     y_acceleration_array = y_acceleration_array[-4:]
 
     if step != 0:
-        x_velocity_integral = b.integrate(step, t_step, x_acceleration_array, x_velocity_integral, integral_type,0)
-        y_velocity_integral = b.integrate(step, t_step, y_acceleration_array, y_velocity_integral, integral_type,0)
+        x_velocity_integral = b.integrate(step, t_step, x_acceleration_array, x_velocity_integral, integral_type, 0)
+        y_velocity_integral = b.integrate(step, t_step, y_acceleration_array, y_velocity_integral, integral_type, 0)
 
         x_velocity_array.append(x_velocity_integral)
         y_velocity_array.append(y_velocity_integral)
@@ -80,7 +80,7 @@ while step <= max_steps:
     if step % 1000000 == 0:
         print(step)
 
-    step+=1
+    step += 1
 
 plt.plot(x_position_array, y_position_array)
 plt.xlabel('x position')
