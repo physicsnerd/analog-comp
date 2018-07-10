@@ -183,7 +183,11 @@ def fifthcum(t_step, new_val, integral_val):
     return t_step/1440*(vals) + integral_val
 
 def simp13spec(t_step, new_val, integral_val):
-    vals = new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1] 
+    '''
+    Version of simp13 method that allows for time step transition; see Overall Documentation.
+    Also note that it is a *cumulative* method, i.e., uses integral_val.
+    '''
+    vals = new_val[-4] - 4*new_val[-3]+7*new_val[-2]+2*new_val[-1]
     return t_step/6*(vals) + integral_val
 
 @decorator
@@ -204,7 +208,13 @@ def integrate(step, t_step, new_val, integral_val, typ, init_val):
     command['timevary'] = {1:trap, 2:simp13, 3:simp13spec, 4:simp13cum}
     default_command = {'trap':trapcum, 'simp13':simp13cum, 'simp38':simp38cum, 'boole':boolecum, 'fifth':fifthcum, 'timevary':simp38cum}
     if step in command[typ].keys():
-        return command[typ][step](t_step, new_val, init_val)
+        if typ != 'timevary':
+            return command[typ][step](t_step, new_val, init_val)
+        else:
+            if step == 4 or step == 3:
+                return command[typ][step](t_step, new_val, integral_val)
+            else:
+                return command[typ][step](t_step, new_val, init_val)
     else:
         return default_command[typ](t_step, new_val, integral_val)
 
