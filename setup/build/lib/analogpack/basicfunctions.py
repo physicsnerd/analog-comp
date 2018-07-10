@@ -227,12 +227,16 @@ def time_handle(step, t_step, time, typ):
             time.append(time[-1]+t_step)
         else:
             if step == 1:
-                time.append(t_step/2)
+                t_step = t_step/2
+                time.append(t_step)
             elif step == 2:
-                time.append(t_step/2 + time[-1])
+                time.append(t_step + time[-1])
+            elif step == 3:
+                t_step = t_step*2
+                time.append(t_step + time[-1])
             else:
                 time.append(t_step + time[-1])
-    return time
+    return (time, t_step)
 
 @decorator
 def derivative(val, t_step):
