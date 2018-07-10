@@ -1,6 +1,7 @@
-from analogpack import basicfunctions as b
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from analogpack import basicfunctions as b
+
 fig = plt.figure()
 ax = Axes3D(fig)
 
@@ -37,7 +38,7 @@ while step <= max_steps:
         x_pos = x_init
         y_pos = y_init
         z_pos = z_init
-        
+
         x_pos_array.append(x_pos)
         y_pos_array.append(y_pos)
         z_pos_array.append(z_pos)
@@ -66,7 +67,7 @@ while step <= max_steps:
         y_pos_array.append(y_pos)
         z_pos_array.append(z_pos)
 
-    step+=1
+    step += 1
 
 ax.plot(x_pos_array, y_pos_array, z_pos_array)
 plt.show()
