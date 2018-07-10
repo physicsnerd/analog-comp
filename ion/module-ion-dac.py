@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 import sys
 sys.path = ['/usr/lib/python35.zip', '/usr/lib/python3.5', '/usr/lib/python3.5/plat-arm-linux-gnueabihf', '/usr/lib/python3.5/lib-dynload', '/home/pi/.local/lib/python3.5/site-packages', '/usr/local/lib/python3.5/dist-packages', '/usr/local/lib/python3.5/dist-packages/RPIO-0.10.0-py3.5-linux-armv7l.egg', '/usr/local/lib/python3.5/dist-packages/analogpack-0.0-py3.5.egg', '/usr/lib/python3/dist-packages']
 
@@ -97,7 +96,3 @@ while step <= max_steps:
 dac.shutdown(0)
 dac.shutdown(1)
 GPIO.cleanup()
-plt.plot(x_position_array, y_position_array)
-plt.xlabel('x position')
-plt.ylabel('y position')
-plt.show()
