@@ -101,4 +101,34 @@ except:
 print(errors)
 
 #b.divide tests
+def divide_tests_correct():
+    basic = b.divide(4, 2)
+    float_divide = b.divide(3.5, .51)
+    fractional = b.divide(1, 2)
+    return [basic, float_divide, fractional]
 
+assert divide_tests_correct() == [2, 7, .5]
+
+errors = {'short':'n', 'long':'n', 'string':'n', 'list':'n'}
+
+try:
+    b.divide(1)
+except:
+    errors['short'] = 'y'
+
+try:
+    b.divide(1, 2, 3)
+except:
+    errors['long'] = 'y'
+
+try:
+    b.divide('hi', 'bye')
+except:
+    errors['string'] = 'y'
+
+try:
+    b.divide([1], [2])
+except:
+    errors['list'] = 'y'
+
+print(errors)
